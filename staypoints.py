@@ -157,7 +157,7 @@ def find_stoppoints(file):
 def main():
 	start = time.time()
 	path = '/home/s/Taxi/1Jan'
-	files = sorted(os.listdir(path))[:25000]
+	files = sorted(os.listdir(path))[:250]
 	lon = []
 	lat = []
 	n = len(files)
@@ -176,7 +176,7 @@ def main():
 		if(len(result[i][0])!=0):
 			for j in range(len(result[i][0])):
 				lon.append(result[i][0][j])
-				lon.append(result[j][1][j])
+				lat.append(result[i][1][j])
 	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
 	df.to_csv('stops.csv', index = False)
 	# print(result)
