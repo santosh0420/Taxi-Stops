@@ -76,7 +76,7 @@ def removeDuplicates(lon, lat):
 	# x = [i for i in range(len(lon1))]
 	# fig = px.scatter(x=lon1,y=lat1)
 	# fig.show()
-	return mean_lon, mean_lat
+	return [mean_lon, mean_lat]
 
 #Difference in two time stamps in Seconds
 def diffinsec(t1, t2):
