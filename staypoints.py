@@ -143,7 +143,7 @@ def find_stoppoints(file):
 			temp_lon.append(mean_lon)
 		i+=steps
 	if(len(temp_lon)==0):
-		return [temp_lon, temp_lat]
+		return ['NULL', 'NULL']
 	temp = removeDuplicates(temp_lon, temp_lat)
 	global num
 	num+=1
@@ -172,13 +172,13 @@ def main():
 	result = []
 	result = ray.get([find_stoppoints.remote(f) for f in files])
 
-	# for i in range(len(result)):
-	# 	if(size(result[i][0])!=0):
-	# 		lon.append(result[i][0])
-	# 		lat.append(result[i][1])
-	# df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
-	# df.to_csv('stops.csv')
-	print(type(result))
+	for i in range(len(result)):
+		if(result[i][0]!='NULL'):
+			lon.append(result[i][0])
+			lat.append(result[i][1])
+	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
+	df.to_csv('stops.csv')
+	print(result)
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
