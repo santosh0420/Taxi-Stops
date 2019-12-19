@@ -164,7 +164,7 @@ def main():
 	num_cpus = psutil.cpu_count(logical=False)
 	print(num_cpus)
 	# ray.init(num_cpus=24)
-	pool = ThreadPool(200)
+	pool = ThreadPool(1000)
 	stops = pool.map(find_stoppoints, files)
 	pool.close()
 	pool.join()
