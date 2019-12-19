@@ -85,7 +85,7 @@ def diffinsec(t1, t2):
 	diff = str(datetime.strptime(t1, '%H:%M:%S') - datetime.strptime(t2, '%H:%M:%S'))
 	return  int(diff.split(':')[0])*3600+int(diff.split(':')[1])*60+int(diff.split(':')[2])
 
-# @ray.remote
+@ray.remote
 def find_stoppoints(file):
 	path = '/home/s/Taxi/temp'
 	dt = 15
@@ -163,13 +163,13 @@ def main():
 	n = len(files)
 	num_cpus = psutil.cpu_count(logical=False)
 	print(num_cpus)
-	# ray.init(num_cpus=24)
-	pool = ThreadPool(1000)
-	stops = pool.map(find_stoppoints, files)
-	pool.close()
-	pool.join()
-	print(stops)
-	# ray.get([find_stoppoints.remote(f) for f in files])
+	ray.init(num_cpus=24)
+	# pool = ThreadPool(50)
+	# stops = pool.map(find_stoppoints, files)
+	# pool.close()
+	# pool.join()
+	# print(stops)
+	ray.get([find_stoppoints.remote(f) for f in files])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
