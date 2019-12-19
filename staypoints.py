@@ -171,6 +171,7 @@ def main():
 	# print(stops)
 	result = []
 	result = ray.get([find_stoppoints.remote(f) for f in files])
+	print(result)
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
