@@ -87,7 +87,7 @@ def diffinsec(t1, t2):
 
 @ray.remote
 def find_stoppoints(file):
-	path = '/home/s/Taxi/temp'
+	path = '/home/s/Taxi/1Jan'
 	dt = 15
 	dc = 50
 	df = pd.read_csv(path+'/'+file)
