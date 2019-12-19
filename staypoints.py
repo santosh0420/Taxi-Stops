@@ -1,7 +1,5 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 from datetime import datetime
-from mpl_toolkits.mplot3d import Axes3D
 import math
 import plotly.express as px
 import plotly.graph_objects as go
@@ -12,6 +10,7 @@ import threading
 from multiprocessing.dummy import Pool as ThreadPool
 import ray
 import psutil
+import time
 		
 
 num = 0
@@ -156,6 +155,7 @@ def find_stoppoints(file):
 	# fig.show()
 
 def main():
+	start = time.time()
 	path = '/home/s/Taxi/temp'
 	files = sorted(os.listdir(path))[:1000]
 	lon = []
@@ -171,6 +171,8 @@ def main():
 	# print(stops)
 	ray.get([find_stoppoints.remote(f) for f in files])
 	print('Complete')
+	end = time.end()
+	print(" Time elapsed: "+str(end-start))
 	#kjfakjfakj
 	#kjsdnkjsdfkjsd
 	#ksdkjsdfkjsdf
