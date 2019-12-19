@@ -76,7 +76,7 @@ def removeDuplicates(lon, lat):
 	# x = [i for i in range(len(lon1))]
 	# fig = px.scatter(x=lon1,y=lat1)
 	# fig.show()
-	return [mean_lon, mean_lat]
+	return lon1, lat1
 
 #Difference in two time stamps in Seconds
 def diffinsec(t1, t2):
@@ -143,7 +143,7 @@ def find_stoppoints(file):
 			temp_lon.append(mean_lon)
 		i+=steps
 	if(len(temp_lon)==0):
-		return ['NULL', 'NULL']
+		return [temp_lon, temp_lat]
 	temp = removeDuplicates(temp_lon, temp_lat)
 	global num
 	num+=1
@@ -173,9 +173,10 @@ def main():
 	result = ray.get([find_stoppoints.remote(f) for f in files])
 
 	for i in range(len(result)):
-		if(result[i][0]!='NULL'):
-			lon.append(result[i][0])
-			lat.append(result[i][1])
+		if(len(result[i][0])!=0):
+			for j in range(len(result[i][0])):
+				lon.append(result[i][0][j])
+				lon.append(result[j][1][j])
 	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
 	df.to_csv('stops.csv', index = False)
 	# print(result)
