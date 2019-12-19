@@ -173,7 +173,7 @@ def main():
 	result = ray.get([find_stoppoints.remote(f) for f in files])
 
 	for i in range(len(result)):
-		if(len(result[i][0])!=0):
+		if(size(result[i][0])!=0):
 			lon.append(result[i][0])
 			lat.append(result[i][1])
 	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
