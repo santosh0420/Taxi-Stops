@@ -3,11 +3,15 @@ import ray
 import time
 import pandas
 
+total_files = 0
+
 @ray.remote
 def split_in_files(path):
+	global total_files
 	df = pd.read_csv(path)
 	uniquelist = list(df['UnitID'].unique())
 	print('Number of Taxis '+str(len(uniquelist)))
+	total_files+=len(df.index)
 
 	prev = df['UnitID'][0]
 	j=0
@@ -39,6 +43,7 @@ def main():
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
+	print(total_files)
 
 if __name__ == '__main__':
 	main()
