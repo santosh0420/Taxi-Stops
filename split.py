@@ -32,7 +32,7 @@ def main():
 	start = time.time()
 	path = '/home/s/Taxi'
 	paths = []
-	for i in range(3,5):
+	for i in range(0,5):
 		paths.append(path+"/"+str(i+1)+'.csv')
 	ray.init(num_cpus=24)
 	ray.get([split_in_files.remote(p) for p in paths])
