@@ -157,7 +157,7 @@ def find_stoppoints(file):
 def main():
 	start = time.time()
 	path = '/home/s/Taxi/1Jan'
-	files = sorted(os.listdir(path))[:250]
+	files = sorted(os.listdir(path))[:25]
 	lon = []
 	lat = []
 	n = len(files)
@@ -172,13 +172,13 @@ def main():
 	result = []
 	result = ray.get([find_stoppoints.remote(f) for f in files])
 
-	for i in range(len(result)):
-		if(size(result[i][0])!=0):
-			lon.append(result[i][0])
-			lat.append(result[i][1])
-	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
-	df.to_csv('stops.csv')
-	print(result)
+	# for i in range(len(result)):
+	# 	if(size(result[i][0])!=0):
+	# 		lon.append(result[i][0])
+	# 		lat.append(result[i][1])
+	# df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
+	# df.to_csv('stops.csv')
+	print(type(result))
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
