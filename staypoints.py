@@ -42,6 +42,7 @@ def removeDuplicates(lon, lat):
 	# x = [i for i in range(len(lat))]
 	# fig = px.scatter(x=lon,y=lat)
 	# fig.show()
+	#Starts here
 	dc = 50
 	visited = [False for i in range(len(lon))]
 	window = changeinlat(dc)
