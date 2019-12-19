@@ -157,7 +157,7 @@ def find_stoppoints(file):
 def main():
 	start = time.time()
 	path = '/home/s/Taxi/1Jan'
-	files = sorted(os.listdir(path))[:250]
+	files = sorted(os.listdir(path))[:25000]
 	lon = []
 	lat = []
 	n = len(files)
