@@ -85,7 +85,7 @@ def diffinsec(t1, t2):
 	diff = str(datetime.strptime(t1, '%H:%M:%S') - datetime.strptime(t2, '%H:%M:%S'))
 	return  int(diff.split(':')[0])*3600+int(diff.split(':')[1])*60+int(diff.split(':')[2])
 
-@ray.remote
+# @ray.remote
 def find_stoppoints(file):
 	path = '/home/s/Taxi/temp'
 	dt = 15
