@@ -170,7 +170,7 @@ def main():
 	# pool.join()
 	# print(stops)
 	result = []
-	ray.get(result = [find_stoppoints.remote(f) for f in files])
+	result = ray.get([find_stoppoints.remote(f) for f in files])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
