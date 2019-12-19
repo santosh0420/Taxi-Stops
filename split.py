@@ -32,8 +32,8 @@ def main():
 	start = time.time()
 	path = '/home/s/Taxi'
 	paths = []
-	for i in range(5):
-		paths.append(path+"/01_Jan_2019_"+str(i+1)+'.csv')
+	for i in range(3,5):
+		paths.append(path+"/"+str(i+1)+'.csv')
 	ray.init(num_cpus=24)
 	ray.get([split_in_files.remote(p) for p in paths])
 	print('Complete')
