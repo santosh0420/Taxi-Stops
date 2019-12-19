@@ -30,7 +30,7 @@ def split_in_files(path):
 
 def main():
 	start = time.time()
-	path = '/home/s/Taxi/1jan'
+	path = '/home/s/Taxi'
 	paths = []
 	for i in range(5):
 		paths.append(path+"/01_Jan_2019_"+str(i+1)+'.csv')
