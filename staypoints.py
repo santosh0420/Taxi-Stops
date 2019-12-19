@@ -157,7 +157,7 @@ def find_stoppoints(file):
 def main():
 	start = time.time()
 	path = '/home/s/Taxi/1Jan'
-	files = sorted(os.listdir(path))[:6000]
+	files = sorted(os.listdir(path))[:250]
 	lon = []
 	lat = []
 	n = len(files)
@@ -169,7 +169,8 @@ def main():
 	# pool.close()
 	# pool.join()
 	# print(stops)
-	ray.get([find_stoppoints.remote(f) for f in files])
+	result = []
+	ray.get(result = [find_stoppoints.remote(f) for f in files])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
