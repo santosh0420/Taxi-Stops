@@ -22,7 +22,7 @@ def main():
 	df = df.sort_values('Latitude')
 	lon0 = df['Longitude']
 	lat0 = df['Latitude']
-	n = 50000
+	n = 10000
 	lon = np.asarray(lon0[:n]).reshape(-1,1)
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
@@ -43,7 +43,7 @@ def main():
 			lon1.append(points[i][1]*(180/(6378137*math.pi)))
 			col.append(clustering.labels_[i])
 	# print(len(lat1))
-	print(lon1)
+	# print(lon1)
 	# # lon1, lat1 = removeDuplicates(lon1, lat1)
 
 	# fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
@@ -53,7 +53,7 @@ def main():
  #    mode='markers',
  #    marker=dict(color=col)))
 
-	# fig.show()
+	fig.show()
 
 if __name__ == '__main__':
 	main()
