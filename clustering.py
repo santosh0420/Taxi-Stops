@@ -22,7 +22,7 @@ def main():
 	df = df.sort_values('Latitude')
 	lon0 = df['Longitude']
 	lat0 = df['Latitude']
-	n = 10000
+	n = 50000
 	lon = np.asarray(lon0[:n]).reshape(-1,1)
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
