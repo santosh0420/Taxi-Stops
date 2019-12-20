@@ -28,7 +28,7 @@ def main():
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
 	# clustering = cluster.OPTICS(min_samples=5, max_eps=5, metric='euclidean', xi=0.05).fit(points)
-	clustering = cluster.Birch(threshold=20, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
+	clustering = cluster.Birch(threshold=15, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
 	# clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=40).fit(points)
 	print(clustering.labels_)
 
