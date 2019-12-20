@@ -43,7 +43,7 @@ def main():
 			lon1.append(points[i][1]*(180/(6378137*math.pi)))
 			col.append(clustering.labels_[i])
 	# print(len(lat1))
-	# print(lon1)
+	print(lon1)
 	# # lon1, lat1 = removeDuplicates(lon1, lat1)
 
 	# fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
@@ -53,7 +53,7 @@ def main():
  #    mode='markers',
  #    marker=dict(color=col)))
 
-	fig.show()
+	# fig.show()
 
 if __name__ == '__main__':
 	main()
