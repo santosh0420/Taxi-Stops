@@ -44,6 +44,7 @@ def main():
 			col.append(clustering.labels_[i])
 	# print(len(lat1))
 	print(lon1)
+	print(lat1)
 	# # lon1, lat1 = removeDuplicates(lon1, lat1)
 
 	# fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
