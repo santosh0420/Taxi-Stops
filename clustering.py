@@ -13,6 +13,7 @@ import ray
 import psutil
 import time	
 from sklearn.cluster import AgglomerativeClustering
+from sklearn import cluster
 import numpy as np
 import hdbscan
 
@@ -26,7 +27,11 @@ def main():
 	lon = np.asarray(lon0[:n]).reshape(-1,1)
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
-	clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=40).fit(points)
+	# clustering = cluster.OPTICS(min_samples=5, max_eps=5, metric='euclidean', xi=0.05).fit(points)
+	clustering = cluster.Birch(threshold=20, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
+	# clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=40).fit(points)
+	print(clustering.labels_)
+
 	lat1 = []
 	lon1 = []
 	# plt.scatter(points[:, 0], points[:, 1], c=clustering.labels_,
@@ -34,27 +39,27 @@ def main():
 	# plt.show()
 	res = collections.Counter(clustering.labels_)
 	# print(res)
-	# print(clustering.labels_)
-	# print(res)
+	# # print(clustering.labels_)
+	# # print(res)
 	col = []
 	for i in range(n):
 		if(res[clustering.labels_[i]]>6):
 			lat1.append(points[i][0]*(180/(6378137*math.pi)))
 			lon1.append(points[i][1]*(180/(6378137*math.pi)))
 			col.append(clustering.labels_[i])
-	# print(len(lat1))
-	print(lon1)
-	print(lat1)
-	# # lon1, lat1 = removeDuplicates(lon1, lat1)
+	print(len(lat1))
+	# print(lon1)
+	# print(lat1)
+	# # # lon1, lat1 = removeDuplicates(lon1, lat1)
 
-	# fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
-	# fig = go.Figure(data=go.Scatter(
- #    x=lat1,
- #    y=lon1,
- #    mode='markers',
- #    marker=dict(color=col)))
+	# # fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
+	fig = go.Figure(data=go.Scatter(
+    x=lat1,
+    y=lon1,
+    mode='markers',
+    marker=dict(color=col)))
 
-	# fig.show()
+	fig.show()
 
 if __name__ == '__main__':
 	main()
