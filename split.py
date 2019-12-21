@@ -4,11 +4,15 @@ import time
 import pandas
 
 total_files = 0
+target_path = ''
 
 @ray.remote
 def split_in_files(path):
 	global total_files
+	global target_path
 	df = pd.read_csv(path)
+	df = df.iloc[1:]
+	df.columns = ['Vehicle_No','UnitID','DateTimeReceived','DataStampDate','Latitude','Longitude','Speed']
 	uniquelist = list(df['UnitID'].unique())
 	print('Number of Taxis '+str(len(uniquelist)))
 	total_files+=len(df.index)
@@ -21,23 +25,23 @@ def split_in_files(path):
 		end = j
 		while True:
 			if(j==len(df.index)):
-				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv('/home/s/Taxi/1Jan/'+str(prev)+'.csv', index=False)
+				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+'.csv', index=False)
 				break
 			elif(j<len(df.index) and prev==df['UnitID'][j]):
 				j+=1
 				end+=1
 			elif(j<len(df.index) and prev!=df['UnitID'][j]):
-				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv('/home/s/Taxi/1Jan/'+str(prev)+'.csv', index=False)
+				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+'.csv', index=False)
 				prev = df['UnitID'][j]
 				break
 
 
 def main():
+	global target_path
 	start = time.time()
 	path = '/home/s/Taxi'
-	paths = []
-	for i in range(0,5):
-		paths.append(path+"/"+str(i+1)+'.csv')
+	target_path = '/home/s/Taxi/1Jan'
+	paths = os.listdir(path)
 	ray.init(num_cpus=24)
 	ray.get([split_in_files.remote(p) for p in paths])
 	print('Complete')
