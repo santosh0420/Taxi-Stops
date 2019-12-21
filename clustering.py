@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime
 import math
 from matplotlib import pyplot as plt
+import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import collections
@@ -28,37 +29,50 @@ def main():
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
 	# clustering = cluster.OPTICS(min_samples=5, max_eps=5, metric='euclidean', xi=0.05).fit(points)
-	clustering = cluster.Birch(threshold=15, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
+	clustering = cluster.Birch(threshold=25, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
 	# clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=40).fit(points)
 	# print(clustering.labels_)
-
 	lat1 = []
 	lon1 = []
 	# plt.scatter(points[:, 0], points[:, 1], c=clustering.labels_,
-	#                         cmap=plt.cm.nipy_spectral)
+	#                         cmap=plt.cm.nipy_speclist(clustering.labels_)tral)
 	# plt.show()
-	res = collections.Counter(clustering.labels_)
+	res  = dict(collections.Counter(clustering.labels_))
+	# print(./type(res))
 	# print(res)
 	# # print(clustering.labels_)
 	# # print(res)
+	# col = []
+	# for key, value in res.items():
+	# 	if(value>5):
+	# 		lat1.append(clustering.subcluster_centers_[key][0]*(180/(6378137*math.pi)))
+	# 		lon1.append(clustering.subcluster_centers_[key][1]*(180/(6378137*math.pi)))
+	# 		col.append(len(lat1))
+
+
 	col = []
+	# print(clustering.subcluster_centers_)
+	# center_lat= []
+	# center_lon = []
 	for i in range(n):
-		if(res[clustering.labels_[i]]>6):
+		if(res[clustering.labels_[i]]>10):
 			lat1.append(points[i][0]*(180/(6378137*math.pi)))
 			lon1.append(points[i][1]*(180/(6378137*math.pi)))
 			col.append(clustering.labels_[i])
 	# print(len(lat1))
-	print(lon1)
-	print(lat1)
-	# # # lon1, lat1 = removeDuplicates(lon1, lat1)
+	# print(lon1)
+	# print(lat1)
+	# lon1, lat1 = removeDuplicates(lon1, lat1)
 
-	# # fig = px.scatter(x=points[:, 0], y=points[:, 1], color =clustering.labels_)
+	# print(list(clustering.labels_))
+	# fig = px.scatter(x=points[:, 0], y=points[:, 1], text)
 	fig = go.Figure(data=go.Scatter(
     x=lat1,
-    y=lon1,
+    y=lon1,																		
     mode='markers',
-    marker=dict(color=col)))
-
+    marker=dict(color=col),
+    text = col))
+	plotly.offline.plot(fig, filename='stops.html')
 	# fig.show()
 
 if __name__ == '__main__':
