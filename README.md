@@ -18,5 +18,5 @@ Step 2: Split large CSV files using split.py
 
 Step 3: Run staypoints.py on these splitted files to generate a csv files named stops.csv that contains stop points for all these taxis.
 
-Step 4: Run clustering.py on stops.csv file to find cluster. You can also update the parameter minimum number of autos.
+Step 4: Run clustering.py on stops.csv file to find clusters. You can also update the parameter minimum number of autos.
 This will generate two files named clusters.csv and centers.csv(centers of all clusters found).

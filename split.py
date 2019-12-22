@@ -2,6 +2,8 @@ import pandas as pd
 import ray
 import time
 import pandas
+import os
+import psutil
 
 total_files = 0
 target_path = ''
@@ -12,6 +14,7 @@ def split_in_files(path):
 	global target_path
 	df = pd.read_csv(path)
 	df = df.iloc[1:]
+	df=df.reset_index(drop=True)
 	df.columns = ['Vehicle_No','UnitID','DateTimeReceived','DataStampDate','Latitude','Longitude','Speed']
 	uniquelist = list(df['UnitID'].unique())
 	print('Number of Taxis '+str(len(uniquelist)))
@@ -39,13 +42,15 @@ def split_in_files(path):
 def main():
 	global target_path
 	start = time.time()
-	Print('Folder should only contain CSV Files')
+	print('Folder should only contain CSV Files')
 	path = input('Enter path where CSV files are stored: ')
 	target_path = input('Enter the new Directory path where splitted files will be stored: ')
+	target_path+='/'
 	paths = os.listdir(path)
 	num_cpus = psutil.cpu_count(logical=False)
-	print('Your system has '+str(2*num_cpus))
+	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
+	print(paths)
 	ray.get([split_in_files.remote(path+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()

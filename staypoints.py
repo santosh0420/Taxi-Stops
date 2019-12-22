@@ -153,7 +153,7 @@ def main():
 	lat = []
 	n = len(files)
 	num_cpus = psutil.cpu_count(logical=False)
-	print('Your system has '+str(2*num_cpus))
+	print('Your system has '+str(2*num_cpus)+" CPUs")
 	ray.init(num_cpus=num_cpus*2)
 	# pool = ThreadPool(50)
 	# stops = pool.map(find_stoppoints, files)

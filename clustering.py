@@ -24,19 +24,21 @@ def main():
 	df = df.sort_values('Latitude')
 	lon0 = df['Longitude']
 	lat0 = df['Latitude']
-	n = 50000
+	n = len(df.index)
 	lon = np.asarray(lon0[:n]).reshape(-1,1)
 	lat = np.asarray(lat0[:n]).reshape(-1,1)
 	points = np.concatenate((lat, lon), axis=1)*(6378137/180)*math.pi
+	radius = input('Enter the raduis of cluster(Recommended 20-25 meters): ')
 	# clustering = cluster.OPTICS(min_samples=5, max_eps=5, metric='euclidean', xi=0.05).fit(points)
-	clustering = cluster.Birch(threshold=25, branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
+	clustering = cluster.Birch(threshold=int(radius), branching_factor=500, n_clusters=None, compute_labels=True, copy=True).fit(points)
 	# clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=40).fit(points)
+	col = []
 	lat1 = []
 	lon1 = []
 	min_taxis = input('Enter minimum number of Taxis for a location to be considered a stop: ')
 	res  = dict(collections.Counter(clustering.labels_))
 	for key, value in res.items():
-		if(value>min_taxis):
+		if(value>int(min_taxis)):
 			lat1.append(clustering.subcluster_centers_[key][0]*(180/(6378137*math.pi)))
 			lon1.append(clustering.subcluster_centers_[key][1]*(180/(6378137*math.pi)))
 			col.append(len(lat1))
@@ -47,7 +49,7 @@ def main():
 	lon1 = []
 	col = []
 	for i in range(n):
-		if(res[clustering.labels_[i]]>min_taxis):
+		if(res[clustering.labels_[i]]>int(min_taxis)):
 			lat1.append(points[i][0]*(180/(6378137*math.pi)))
 			lon1.append(points[i][1]*(180/(6378137*math.pi)))
 			col.append(clustering.labels_[i])
