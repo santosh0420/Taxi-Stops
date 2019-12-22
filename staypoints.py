@@ -14,6 +14,7 @@ import time
 		
 
 num = 0
+path = ''
 
 def rad(d):
     return float(d) * math.pi/180.0
@@ -38,10 +39,6 @@ def changeinlat(dist):
 
 #To find mean of points in dc window for a perticular taxi
 def removeDuplicates(lon, lat):
-	# x = [i for i in range(len(lat))]
-	# fig = px.scatter(x=lon,y=lat)
-	# fig.show()
-	#Starts here
 	dc = 50
 	visited = [False for i in range(len(lon))]
 	window = changeinlat(dc)
@@ -73,9 +70,6 @@ def removeDuplicates(lon, lat):
 		lon1.append(mean_lon)
 		lat1.append(mean_lat)
 		count+=1
-	# x = [i for i in range(len(lon1))]
-	# fig = px.scatter(x=lon1,y=lat1)
-	# fig.show()
 	return lon1, lat1
 
 #Difference in two time stamps in Seconds
@@ -87,7 +81,7 @@ def diffinsec(t1, t2):
 
 @ray.remote
 def find_stoppoints(file):
-	path = '/home/s/Taxi/1Jan'
+	global path
 	dt = 15
 	dc = 50
 	df = pd.read_csv(path+'/'+file)
@@ -149,14 +143,11 @@ def find_stoppoints(file):
 	num+=1
 	print(str(num)+' .................   Size  '+str(os.stat(path+'/'+file).st_size/1000)+' Kb ................ '+file)
 	return temp
-        #print(temp)
-	# x = [i for i in range(len(lat))]
-	# fig = px.scatter(x=lon,y=lat)
-	# fig.show()
-
+   	
 def main():
 	start = time.time()
-	path = '/home/s/Taxi/1Jan'
+	global path
+	path = input('Enter Splitted csv files folder path:')
 	files = sorted(os.listdir(path))[:25000]
 	lon = []
 	lat = []
@@ -179,15 +170,9 @@ def main():
 				lat.append(result[i][1][j])
 	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
 	df.to_csv('stops.csv', index = False)
-	# print(result)
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
-	#kjfakjfakj
-	#kjsdnkjsdfkjsd
-	#ksdkjsdfkjsdf
-	#dfjdsfdjk
-	#sdkfsdf
 
 if __name__ == '__main__':
 	main()

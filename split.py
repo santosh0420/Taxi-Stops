@@ -39,11 +39,12 @@ def split_in_files(path):
 def main():
 	global target_path
 	start = time.time()
-	path = '/home/s/Taxi'
-	target_path = '/home/s/Taxi/1Jan'
+	Print('Folder should only contain CSV Files')
+	path = input('Enter path where CSV files are stored: ')
+	target_path = input('Enter the new Directory path where splitted files will be stored: ')
 	paths = os.listdir(path)
 	ray.init(num_cpus=24)
-	ray.get([split_in_files.remote(p) for p in paths])
+	ray.get([split_in_files.remote(path+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
