@@ -148,13 +148,13 @@ def main():
 	start = time.time()
 	global path
 	path = input('Enter Splitted csv files folder path:')
-	files = sorted(os.listdir(path))[:25000]
+	files = sorted(os.listdir(path))
 	lon = []
 	lat = []
 	n = len(files)
 	num_cpus = psutil.cpu_count(logical=False)
-	print(num_cpus)
-	ray.init(num_cpus=24)
+	print('Your system has '+str(2*num_cpus))
+	ray.init(num_cpus=num_cpus*2)
 	# pool = ThreadPool(50)
 	# stops = pool.map(find_stoppoints, files)
 	# pool.close()
