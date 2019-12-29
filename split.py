@@ -13,6 +13,7 @@ target_path = ''
 def split_in_files(path):
 	global total_files
 	global target_path
+	target_path+='/'+path.split('/')[-2]+'/'
 	df = pd.read_csv(path)
 	df = df.iloc[1:]
 	df=df.reset_index(drop=True)
@@ -50,23 +51,19 @@ def split_in_files(path):
 def main():
 	global target_path
 	start = time.time()
-	# print('Folder should only contain CSV Files')
-	# path = input('Enter path where CSV files are stored: ')
-	# target_path = input('Enter the new Directory path where splitted files will be stored: ')
 	path = '/home/s/all'
-	# target_path = '/home/s/all0'
-	target_path+='/'
-	paths1 = os.listdir(path)
+	paths = os.listdir(path)
+	target_path = 'home/s/all0'
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
-	# print(paths1)
-	for paths2 in paths1:
-		paths = os.listdir(path+'/'+paths2)
-		print(paths)
-		target_path = (path+'/'+paths2).replace('all', 'all0')+'/'
-		print(target_path)
-		ray.get([split_in_files.remote(path+'/'+paths2+'/'+p) for p in paths])
+	all_files = []
+	for p in paths:
+		p1 = os.listdir(path+'/'+p)
+		for p2 in p1:
+			all_files.append(os.real_path(p2))	
+	target_path = (path+'/'+paths2).replace('all', 'all0')+'/'
+		ray.get([split_in_files.remote(f) for f in all_files])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
