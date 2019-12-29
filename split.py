@@ -60,10 +60,11 @@ def main():
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
 	print(paths1)
-	for paths in paths1:
+	for paths2 in paths1:
+		paths = os.listdir(path+'/'+paths)
 		print(paths)
 		target_path = (path+'/'+paths).replace('all', 'all0')+'/'
-		ray.get([split_in_files.remote(path+'/'+paths+'/'+p) for p in paths])
+		ray.get([split_in_files.remote(path+'/'+paths2+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
