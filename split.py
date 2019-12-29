@@ -61,7 +61,7 @@ def main():
 	for p in paths:
 		p1 = os.listdir(path+'/'+p)
 		for p2 in p1:
-			all_files.append(os.real_path(p2))
+			all_files.append(os.path.real_path(p2))
 	ray.get([split_in_files.remote(f) for f in all_files])
 	print('Complete')
 	end = time.time()
