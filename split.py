@@ -43,7 +43,7 @@ def split_in_files(path):
 				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+' '+reg_no+'.csv', index=False)
 				prev = df['UnitID'][j]
 				break
-	os.remove(path)
+	# os.remove(path)
 
 
 def main():
