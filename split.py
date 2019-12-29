@@ -63,7 +63,7 @@ def main():
 	for paths2 in paths1:
 		paths = os.listdir(path+'/'+paths2)
 		print(paths)
-		target_path = (path+'/'+paths).replace('all', 'all0')+'/'
+		target_path = (path+'/'+paths2).replace('all', 'all0')+'/'
 		ray.get([split_in_files.remote(path+'/'+paths2+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
