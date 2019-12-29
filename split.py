@@ -49,16 +49,21 @@ def split_in_files(path):
 def main():
 	global target_path
 	start = time.time()
-	print('Folder should only contain CSV Files')
-	path = input('Enter path where CSV files are stored: ')
-	target_path = input('Enter the new Directory path where splitted files will be stored: ')
+	# print('Folder should only contain CSV Files')
+	# path = input('Enter path where CSV files are stored: ')
+	# target_path = input('Enter the new Directory path where splitted files will be stored: ')
+	path = '/home/s/all'
+	# target_path = '/home/s/all0'
 	target_path+='/'
-	paths = os.listdir(path)
+	paths1 = os.listdir(path)
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
 	print(paths)
-	ray.get([split_in_files.remote(path+'/'+p) for p in paths])
+	for paths in paths1:
+		print(paths)
+		target_path = paths.replace('all', 'all0')+'/'
+		ray.get([split_in_files.remote(path+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
