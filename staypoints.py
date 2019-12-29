@@ -19,7 +19,7 @@ path = ''
 def rad(d):
     return float(d) * math.pi/180.0
 
-#distance between two latitudes
+#distance between two corrdinates
 def GetDistance(lng1,lat1,lng2,lat2):
 	EARTH_RADIUS=6378.137
 	radLat1 = rad(lat1)
