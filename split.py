@@ -42,7 +42,7 @@ def split_in_files(path):
 				reg_no = df['Vehicle_No'][start].replace(" ","")
 				if(reg_no[:2]!='DL' and reg_no[:2]!='HR'):
 					reg_no = 'NULL'
-				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+' '+reg_no+'.csv', index=False)
+				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+''+reg_no+'.csv', index=False)
 				prev = df['UnitID'][j]
 				break
 	# os.remove(path)
