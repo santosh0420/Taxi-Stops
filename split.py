@@ -13,7 +13,7 @@ target_path = ''
 def split_in_files(path):
 	global total_files
 	global target_path
-	target_path+='/'+path.split('/')[-2]+'/'
+	target_path1=target_path+'/'+path.split('/')[-2]+'/'
 	print(target_path)
 	df = pd.read_csv(path)
 	df = df.iloc[1:]
@@ -34,7 +34,7 @@ def split_in_files(path):
 				reg_no = df['Vehicle_No'][start].replace(" ","")
 				if(reg_no[:2]!='DL' and reg_no[:2]!='HR'):
 					reg_no = 'NULL'
-				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+''+reg_no+'.csv', index=False)
+				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path1+str(prev)+''+reg_no+'.csv', index=False)
 				break
 			elif(j<len(df.index) and prev==df['UnitID'][j]):
 				j+=1
@@ -43,7 +43,7 @@ def split_in_files(path):
 				reg_no = df['Vehicle_No'][start].replace(" ","")
 				if(reg_no[:2]!='DL' and reg_no[:2]!='HR'):
 					reg_no = 'NULL'
-				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path+str(prev)+''+reg_no+'.csv', index=False)
+				df.iloc[start:end].drop(['UnitID'], axis = 1).drop(['Vehicle_No'], axis=1).to_csv(target_path1+str(prev)+''+reg_no+'.csv', index=False)
 				prev = df['UnitID'][j]
 				break
 	# os.remove(path)
