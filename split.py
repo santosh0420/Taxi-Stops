@@ -4,6 +4,7 @@ import time
 import pandas
 import os
 import psutil
+import progressbar
 
 total_files = 0
 target_path = ''
@@ -22,8 +23,8 @@ def split_in_files(path):
 
 	prev = df['UnitID'][0]
 	j=0
-	for i in range(len(uniquelist)):
-		print(str(prev)+"Generating File for Taxi ..... "+str(i+1))
+	for i in progressbar.progressbar(range(len(uniquelist))):
+		# print(str(prev)+"Generating File for Taxi ..... "+str(i+1))
 		start = j
 		end = j
 		while True:
@@ -59,11 +60,12 @@ def main():
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
-	print(paths1)
+	# print(paths1)
 	for paths2 in paths1:
 		paths = os.listdir(path+'/'+paths2)
 		print(paths)
 		target_path = (path+'/'+paths2).replace('all', 'all0')+'/'
+		print(target_path)
 		ray.get([split_in_files.remote(path+'/'+paths2+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
