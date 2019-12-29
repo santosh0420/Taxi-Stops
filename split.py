@@ -62,8 +62,8 @@ def main():
 	print(paths1)
 	for paths in paths1:
 		print(paths)
-		target_path = paths.replace('all', 'all0')+'/'
-		ray.get([split_in_files.remote(path+'/'+p) for p in paths])
+		target_path = (path+'/'+paths).replace('all', 'all0')+'/'
+		ray.get([split_in_files.remote(path+'/'+paths+'/'+p) for p in paths])
 	print('Complete')
 	end = time.time()
 	print(" Time elapsed: "+str(end-start))
