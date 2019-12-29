@@ -61,7 +61,7 @@ def main():
 	ray.init(num_cpus=num_cpus*2)
 	print(paths1)
 	for paths2 in paths1:
-		paths = os.listdir(path+'/'+paths)
+		paths = os.listdir(path+'/'+paths2)
 		print(paths)
 		target_path = (path+'/'+paths).replace('all', 'all0')+'/'
 		ray.get([split_in_files.remote(path+'/'+paths2+'/'+p) for p in paths])
