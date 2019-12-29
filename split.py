@@ -57,7 +57,7 @@ def main():
 	target_path = '/home/s/all0'
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
-	ray.init(num_cpus=num_cpus*2)
+	ray.init(num_cpus=num_cpus)
 	all_files = []
 	for p in paths:
 		p1 = os.listdir(path+'/'+p)
