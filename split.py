@@ -59,7 +59,7 @@ def main():
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
-	print(paths)
+	print(paths1)
 	for paths in paths1:
 		print(paths)
 		target_path = paths.replace('all', 'all0')+'/'
