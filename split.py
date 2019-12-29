@@ -14,6 +14,7 @@ def split_in_files(path):
 	global total_files
 	global target_path
 	target_path+='/'+path.split('/')[-2]+'/'
+	print(target_path)
 	df = pd.read_csv(path)
 	df = df.iloc[1:]
 	df=df.reset_index(drop=True)
