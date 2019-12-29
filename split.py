@@ -53,7 +53,7 @@ def main():
 	start = time.time()
 	path = '/home/s/all'
 	paths = os.listdir(path)
-	target_path = 'home/s/all0'
+	target_path = '/home/s/all0'
 	num_cpus = psutil.cpu_count(logical=False)
 	print('Your system has '+str(2*num_cpus)+' CPUs')
 	ray.init(num_cpus=num_cpus*2)
