@@ -3,6 +3,7 @@ from datetime import datetime
 import math
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly
 import collections
 import statistics
 import os
@@ -11,6 +12,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 import ray
 import psutil
 import time
+import itertools
 		
 
 num = 0
@@ -37,23 +39,43 @@ def changeinlat(dist):
 	ch = ((dist*180)/(1000*EARTH_RADIUS))/(math.pi)
 	return ch
 
+def average_time(t1, t2):
+	t1 = t1.split(' ')[1][:-4]
+	t2 = t2.split(' ')[1][:-4]
+	hour1 = int(t1.split(':')[0])
+	hour2 = int(t2.split(':')[0])
+	minute1 = int(t1.split(':')[1])
+	minute2 = int(t2.split(':')[1])
+	# average = ''
+	# if(hour2<hour1):
+	# 	if(30+(minute2+minute1)/2>60):
+	# 		average+=str(hour1)+':'+str(int((30+(minute2+minute1)/2)-60))
+	# 	else:
+	# 		average+=str(hour2)+':'+str(int((minute2+minute1)/2))
+	# else:
+	# 	average+=str(hour2)+':'+str(int((minute2+minute1)/2))
+	# return average+':0'
+	return ((hour1*60+minute1)+(hour2*60+minute2))/2
+
 #To find mean of points in dc window for a perticular taxi
-def removeDuplicates(lon, lat):
+def removeDuplicates(lon, lat, time):
 	dc = 50
 	visited = [False for i in range(len(lon))]
 	window = changeinlat(dc)
 	count=0
 	lon1 = []
 	lat1 = []
+	time1 = []
 	for i in range(len(lon)):
 		if(visited[i]==True):
 				continue
+		time2 = [time[i]]
 		cluster_lat = [lat[i]]
 		cluster_lon = [lon[i]]
 		mean_lat = lat[i]
 		mean_lon = lon[i]
 		visited[i] = True
-		for j in range(len(lon)):
+		for j in range(len(lon)):	
 			if(i==j):
 				continue
 			if(visited[j]==True):
@@ -65,12 +87,15 @@ def removeDuplicates(lon, lat):
 				cluster_lat.append(lat[j])
 				mean_lon = statistics.mean(cluster_lon)
 				mean_lat = statistics.mean(cluster_lat)
+				time2.append(time[j])
 		# if(len(cluster_lat)>1):
 			# print(statistics.stdev(cluster_lat))
 		lon1.append(mean_lon)
 		lat1.append(mean_lat)
+		time1.append(time2)
 		count+=1
-	return lon1, lat1
+	return lon1, lat1, time1
+
 
 #Difference in two time stamps in Seconds
 def diffinsec(t1, t2):
@@ -93,6 +118,8 @@ def find_stoppoints(file):
 		data_freq.append(diffinsec(df['DateTimeReceived'][i].split(' ')[1][:-4], df['DateTimeReceived'][i+1].split(' ')[1][:-4]))
 		i+=1
 	i=0
+	time = []
+	names = []
 	while i<len(df.index):
 		if(len(df.index)<10):
 			break
@@ -133,21 +160,24 @@ def find_stoppoints(file):
 		stdev = GetDistance(mean_lon, mean_lat, mean_lon+std_lon, mean_lat+std_lat)
 		mean_speed = statistics.mean(df['Speed'][i:i+steps])
 		if(mean_speed<0.7 and velocity<0.7 and stdev<dc):
+			time.append(average_time(df['DateTimeReceived'][i], df['DateTimeReceived'][i+steps-1]))
 			temp_lat.append(mean_lat)
 			temp_lon.append(mean_lon)
 		i+=steps
 	if(len(temp_lon)==0):
-		return [temp_lon, temp_lat]
-	temp = removeDuplicates(temp_lon, temp_lat)
+		return [temp_lon, temp_lat, time, names]
+	temp = removeDuplicates(temp_lon, temp_lat, time)
 	global num
 	num+=1
 	print(str(num)+' .................   Size  '+str(os.stat(path+'/'+file).st_size/1000)+' Kb ................ '+file)
+	temp = temp+ (file[:-4],)
 	return temp
    	
 def main():
 	start = time.time()
 	global path
-	path = input('Enter Splitted csv files folder path:')
+	# path = input('Enter Splitted csv files folder path:')
+	path = '/home/s/Documents/Taxi/26Dec'
 	files = sorted(os.listdir(path))
 	lon = []
 	lat = []
@@ -162,13 +192,22 @@ def main():
 	# print(stops)
 	result = []
 	result = ray.get([find_stoppoints.remote(f) for f in files])
-
+	time1 = []
+	names = []
+	print(len(result[0]))
 	for i in range(len(result)):
 		if(len(result[i][0])!=0):
 			for j in range(len(result[i][0])):
 				lon.append(result[i][0][j])
 				lat.append(result[i][1][j])
-	df = pd.DataFrame(list(zip(lon, lat)), columns = ['Longitude', 'Latitude'])
+				time1.append(result[i][2][j])
+				names.append(result[i][3])
+	print(time1)
+	time2 = merged = list(itertools.chain(*time1))
+	x = [1 for i in range(len(time2))]
+	fig = go.Figure(data=go.Scatter(x=time2,y=x,mode='markers'))
+	plotly.offline.plot(fig, filename='stops.html')
+	df = pd.DataFrame(list(zip(lon, lat, names, time1)), columns = ['Longitude', 'Latitude', 'Vehicle_No', 'Time'])
 	df.to_csv('stops.csv', index = False)
 	print('Complete')
 	end = time.time()
