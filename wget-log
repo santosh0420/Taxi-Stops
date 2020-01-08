@@ -1,0 +1,4 @@
+--2020-01-08 00:36:40--  http://google.com/
+Resolving google.com (google.com)... 172.217.167.238, 2404:6800:4002:80f::200e
+Connecting to google.com (google.com)|172.217.167.238|:80... failed: Connection timed out.
+Connecting to google.com (google.com)|2404:6800:4002:80f::200e|:80... failed: Network is unreachable.
