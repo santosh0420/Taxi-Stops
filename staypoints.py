@@ -177,7 +177,7 @@ def main():
 	start = time.time()
 	global path
 	# path = input('Enter Splitted csv files folder path:')
-	path = '/home/s/Documents/Taxi/26Dec'
+	path = '/home/ee/btech/ee1160420/26Dec'
 	files = sorted(os.listdir(path))
 	lon = []
 	lat = []

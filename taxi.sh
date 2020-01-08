@@ -6,9 +6,10 @@
 ### Request email when job begins and ends
 ####
 #PBS -q low
-#PBS -l select=4:ncpus=24
+#PBS -I
+#PBS -l select=1:ncpus=24
 ### Specify "wallclock time" required for this job, hhh:mm:ss
-#PBS -l walltime=01:00:00
+#PBS -l walltime=30:00
 
 #PBS -l software=cluster
 # After job starts, must goto working directory. 
